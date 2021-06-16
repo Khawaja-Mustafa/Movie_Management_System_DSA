@@ -63,14 +63,23 @@ void update(string mName)
 		temp = temp->next;
 	}
 }
-//void Delete()
-//{
-//
-//}
+
 void display() 
 {
+	fstream file, file2;
+	/*
+	file.open("Movie_Details.txt", ios::in | ios::out);
+	string text;
+	while (!file.eof())
+	{
+		getline(file, text);
+		cout << text << endl;
+	}
+	file.close();*/
+
 	MovieManagement* temp = head;
-	fstream file;
+	
+	file2.open("Movie_Details.txt", ios::in | ios::out | ios::trunc);
 	file.open("Movie_Details.txt", ios::in | ios::out | ios::app);
 	while (temp != NULL) 
 	{
@@ -78,10 +87,24 @@ void display()
 		file << temp->Name << endl;
 		file << temp->Date << endl;
 		file << temp->Time << endl << endl;
-		cout << "Movie Name: " << temp->Name << endl;
+		/*cout << "Movie Name: " << temp->Name << endl;
 		cout << "Date of Venue: " << temp->Date << endl;
-		cout << "Time of Venue: " << temp->Time << endl;
+		cout << "Time of Venue: " << temp->Time << endl;*/
 		temp = temp->next;
+	}
+	file2.close();
+	file.close();
+
+}
+void view_movies()
+{
+	fstream file, file2;
+	file.open("Movie_Details.txt", ios::in | ios::out);
+	string text;
+	while (!file.eof())
+	{
+		getline(file, text);
+		cout << text << endl;
 	}
 	file.close();
 }
@@ -111,18 +134,22 @@ void Setseats(int iAv_Tickets[][7])
 }
 void UpdateAvailableSeats()
 {
-	fstream file;
+	fstream file, file2;
 	cout << "\t\t\t******************************************************\n";
 	cout << "\t\t\t\t\tMovie Management System\n";
 	cout << "\t\t\t******************************************************\n\n";
 	cout << "\t\t\t\t\t<<<<<< Seat Left >>>>>>\n\n";
 	string text;
+	file2.open("Book_Ticket.txt", ios::in | ios::out | ios::trunc);
 	file.open("Book_Ticket.txt", ios::in | ios::out | ios::app);
 	while (!file.eof())
 	{
 		getline(file, text);
+		cout << text << endl;
 	}
+	file2.close();
 	file.close();
+
 	for (int i = 0; i < 7; i++)//Determines Seat booking
 	{
 		for (int j = 0; j < 7; j++)
@@ -130,29 +157,33 @@ void UpdateAvailableSeats()
 			if (Av_Tickets[i][j] == 0)
 			{
 				cout << "\t| " << i << j << " |\t";
-				file << "\t| " << i << j << " |\t";
+				
 			}
 			else
 			{
 				cout << "\t| " << "XX" << " |\t";
-				file << "\t| " << "XX" << " |\t";
+				
 			}
 		}
 
 	}
+
 }
 int main() 
 {
 
 	string mName;
 	Main_Menu:
-	cout << "\t\t\tMovie Management System\n";
-	cout << " 1) Add Movies\n 2) Update Movies\n 3) Display Movies\n Your Choice: ";
+	cout << "\t\t\t---------------------------------------\n\n";
+	cout << "\t\t\t<<<<<<<<Movie Management System>>>>>>>>\n\n";
+	cout << "\t\t\t---------------------------------------\n\n";
+	cout << " \t\t\t1) Add Movies\n \t\t\t2) Update Movies\n \t\t\t3) Display Movies\n \t\t\t4) Book Ticket \n \t\t\t5) View Movies \n \t\t\t6) Exit Program \n \t\t\tYour Choice: ";
 	int choice;
 	cin >> choice;
 	if(choice == 1)
 	{
 		addMoviedetails();
+		display();
 		system("Pause");
 		system("cls");
 		goto Main_Menu;
@@ -163,6 +194,7 @@ int main()
 		cin.ignore();
 		getline(cin, mName);
 		update(mName);
+		display();
 		system("pause");
 		system("cls");
 		goto Main_Menu;
@@ -175,6 +207,110 @@ int main()
 		cout << "\n";
 		system("pause");
 		system("cls");
+	}
+	else if (choice == 4) //BOOK Ticket
+	{
+		//BOOKTICKET
+		system("cls");
+		cout << "\t\t\t******************************************************\n";
+		cout << "\t\t\t\t\tMovie Management System\n";
+		cout << "\t\t\t******************************************************\n\n";
+		cout << "\t\t\t\t\t<<<<<< Book Your Seats >>>>>>\n\n";
+
+		cout << "\t\t\tEnter the following details :-" << endl;
+		cout << "\t\t\tUser ID: ";
+		cin.ignore();
+		//-----------------------------
+		int RiID;
+		string RiName;
+		int iAv_Ticket[7][7];
+		string Movie_choice;
+		//-----------------------------
+		cin >> RiID;
+
+		cout << "\t\t\tUser Name: ";
+		cin.ignore();
+		
+		getline(cin, RiName);
+		cout << endl;
+
+		cout << "\t\t\tWhich Moviue You want to see? :-" << endl << endl;
+		display();
+		cout << "\n\n";
+		cout << "You have Selected :";
+		cin >> Movie_choice;
+		cout << endl << endl;
+		system("ClS");
+		cout << "\t\t\t******************************************************\n";
+		cout << "\t\t\t\t\tMovie Management System\n";
+		cout << "\t\t\t******************************************************\n\n";
+		cout << "\t\t\t\t\t<<<<<< Book Your Seats >>>>>>\n\n";
+		char choice_B;
+		for (int i = 0; i < 7; i++) //Initializing 2D array == 0
+		{
+			for (int j = 0; j < 7; j++)
+			{
+				iAv_Ticket[i][j] = 0; //initialize 2day array to '0'
+			}
+		}
+
+		for (int i = 0; i < 7; i++) //49 Table outputs
+		{
+			for (int j = 0; j < 7; j++)
+			{
+				cout << "\t| " << i << j << " |\t";
+			}
+			cout << endl << endl;
+		}
+
+		for (int i = 0; i < 7; i++)//Booking
+		{
+			for (int j = 0; j < 7; j++)
+			{
+				cout << "Do you want to book a Seat/ticket? (Y/N):";
+				cin >> choice_B;
+				if (choice_B == 'Y' || choice_B == 'y')
+				{
+					cout << "Select Row and Column (0 1) :";
+					cin >> i >> j;
+					iAv_Ticket[i][j] = 1;
+					i = 0; // i = 0, j = 0 for running program on i = 6, j = 6.
+					j = 0;
+				}
+				else if (choice_B == 'N' || choice_B == 'n')
+				{
+					i = 6;
+					j = 6;
+					system("cls");
+					break;//breaks the loop
+				}
+				else
+				{
+					cout << "\n\nWrong Input!\n\n";
+				}
+			}
+		}
+		Setseats(iAv_Ticket);
+		UpdateAvailableSeats();
+		system("pause");
+		system("CLS");
+		goto Main_Menu;
+	}
+	else if (choice == 5)
+	{
+		system("CLS");
+		cout << "\t\t\t******************************************************\n";
+		cout << "\t\t\t\t\tMovie Management System\n";
+		cout << "\t\t\t******************************************************\n\n";
+		cout << "\t\t\t\t\t<<<<<< View Movies >>>>>>\n\n";
+		view_movies();
+		system("pause");
+		system("cls");
+		goto Main_Menu;
+	}
+	else if(choice == 6)
+	{
+		exit;
 	}
 	else
 	{
