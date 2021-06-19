@@ -169,6 +169,111 @@ void UpdateAvailableSeats()
 	}
 
 }
+struct registerddl
+{
+	string ID, Name, Address, PhoneNo, Student,Institute;
+	registerddl* next;
+	registerddl* prev;
+};
+registerddl* R_head = NULL;
+void RegisterUser()
+{
+	registerddl* newnode = new registerddl();
+	string iname, iId, iAddress, iPhone, student,institute;
+	cout << "Enter Name:";
+	cin.ignore();
+	getline(cin, iname);
+	cout << "Enter ID:";
+	cin.ignore();
+	getline(cin, iId);
+	cout << "Enter Address:";
+	cin.ignore();
+	getline(cin, iAddress);
+	cout << "Enter Phone No:";
+	cin.ignore();
+	getline(cin, iPhone);
+	cout << "student(Yes Or No):";
+	cin >> student;
+	if (student == "yes")
+	{
+		cout << "Enter Institute Name : ";
+		cin >> institute;
+	}
+	else
+	{
+		return;
+	}
+	newnode->ID = iId;
+	newnode->Address = iAddress;
+	newnode->Name = iname;
+	newnode->PhoneNo = iPhone;
+	newnode->Student = student;
+	newnode->Institute = institute;
+	if (R_head == NULL)
+	{
+		newnode->next = NULL;
+		newnode->prev = NULL;
+		R_head = newnode;
+		return;
+	}
+	else
+	{
+		registerddl* temp = R_head;
+		while (temp->next != NULL)
+		{
+			temp = temp->next;
+		}
+		temp->next = newnode;
+		newnode->prev = temp->next;
+		newnode->next = NULL;
+	}
+}
+void R_display()
+{
+	registerddl* temp = R_head;
+	while (temp != NULL)
+	{
+		cout << "Name : "<<temp->Name << endl;
+		cout << "ID : "<< temp->ID << endl;
+		cout << "Address : "<<temp->Address << endl;
+		cout << "Phone No : "<<temp->PhoneNo << endl;
+		cout << "student(Yes Or No) : " << temp->Student << endl;
+		cout << "Institute Name : " << temp->Institute << endl;
+		temp = temp->next;
+	}
+}
+void R_delete(string id)
+{
+	registerddl *p, *q;
+	q = R_head;
+	p = R_head->next;
+	if (q->ID == id)
+	{
+		R_head = p;
+		delete(q);
+		p->prev = NULL;
+	}
+	else
+	{
+		while (p->ID != id)
+		{
+			p = p->next;
+			q = q->next;
+		}
+		if (p->next == NULL)
+		{
+			q->next = NULL;
+			delete(p);
+		}
+		else
+		{
+			q->next = p->next->prev;
+			p->next->prev = q;
+			delete(p);
+		}
+	}
+}
+
 int main() 
 {
 
