@@ -35,7 +35,8 @@ void RegisterUser()
 	}
 	else
 	{
-		cout << "\t\t\tEnter Institute Name : None\n";
+		institute = "None";
+		cout << "\t\t\tEnter Institute Name : "<< institute << "\n";
 	}
 	newnode->ID = iId;
 	newnode->Address = iAddress;
