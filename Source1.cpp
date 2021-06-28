@@ -2,8 +2,8 @@
 #include <string>
 #include <fstream>
 #include <ctime>
+#include <conio.h>
 using namespace std;
-void dateAndTime();
 struct registerddl
 {
 	int ID;
@@ -535,11 +535,18 @@ Admin_Login:
 	cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 	cout << "\t\t\t\t\t~~~~~ ADMIN LOGIN ~~~~~\n";
 	cout << "\n\n\t\tAdmin ID: ";
+	string pass = "";
+	char ch;
 	cin >> Admin_ID;
 	cout << "\n\n\t\tAdmin Password: ";
-	cin.ignore();
-	getline(cin, Admin_Pass);
-	if (Admin_ID == 123 && Admin_Pass == "123")
+	ch = _getch();
+	while (ch != 13)
+	{
+		pass.push_back(ch);
+		cout << '*';
+		ch = _getch();
+	}
+	if (pass == "123")
 	{
 		system("cls");
 		cout << "\n\n\t\t <<<WELCOME>>> \n\n";
