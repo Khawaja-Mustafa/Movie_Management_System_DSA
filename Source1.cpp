@@ -4,166 +4,7 @@
 #include <ctime>
 #include <conio.h>
 using namespace std;
-struct registerddl
-{
-	int ID;
-	string Name, Address, PhoneNo, Student, Institute;
-	registerddl* next;
-	registerddl* prev;
-};
-registerddl* R_head = NULL;
-void RegisterUser()
-{
-	registerddl* newnode = new registerddl();
-	int iId;
-	string iname, iAddress, iPhone, student, institute;
-	cout << "\t\t\tEnter ID:";
-	cin >> iId;
-	cout << "\t\t\tEnter Name:";
-	cin.ignore();
-	getline(cin, iname);
-	cout << "\t\t\tEnter Address:";
-	getline(cin, iAddress);
-	cout << "\t\t\tEnter Phone No:";
-	getline(cin, iPhone);
-	cout << "\t\t\tstudent(Yes Or No):";
-	cin >> student;
-	if (student == "yes" || student == "Yes")
-	{
-		cout << "\t\t\tEnter Institute Name : ";
-		cin.ignore();
-		getline(cin, institute);
-	}
-	else
-	{
-		institute = "None";
-		cout << "\t\t\tEnter Institute Name : " << institute << "\n";
-	}
-	newnode->ID = iId;
-	newnode->Address = iAddress;
-	newnode->Name = iname;
-	newnode->PhoneNo = iPhone;
-	newnode->Student = student;
-	newnode->Institute = institute;
-	if (R_head == NULL)
-	{
-		newnode->next = NULL;
-		newnode->prev = NULL;
-		R_head = newnode;
-		return;
-	}
-	else
-	{
-		registerddl* temp = R_head;
-		while (temp->next != NULL)
-		{
-			temp = temp->next;
-		}
-		temp->next = newnode;
-		newnode->prev = temp;
-		newnode->next = NULL;
-	}
-
-}
-void R_display(int idisplay)
-{
-	fstream file, file2;
-	registerddl* temp = R_head;
-	file2.open("Registered_Users.txt", ios::out | ios::in | ios::trunc);
-	file.open("Registered_Users.txt", ios::out | ios::in | ios::app);
-	if (idisplay == 0)
-	{
-		while (temp != NULL)
-		{
-			file << "Name : " << temp->Name << endl;
-			file << "ID : " << temp->ID << endl;
-			file << "Address : " << temp->Address << endl;
-			file << "Phone No : " << temp->PhoneNo << endl;
-			file << "student(Yes Or No) : " << temp->Student << endl;
-			file << "Institute Name : " << temp->Institute << endl;
-			temp = temp->next;
-		}
-		file2.close();
-		file.close();
-	}
-	else if (idisplay == 1)
-	{
-		while (temp != NULL)
-		{
-			cout << "ID : " << temp->ID << endl;
-			cout << "Name : " << temp->Name << endl;
-			cout << "Address : " << temp->Address << endl;
-			cout << "Phone No : " << temp->PhoneNo << endl;
-			cout << "student(Yes Or No) : " << temp->Student << endl;
-			cout << "Institute Name : " << temp->Institute << endl;
-			temp = temp->next;
-		}
-	}
-}
-void R_update()
-{
-	int id;
-	if (R_head == NULL)
-	{
-		cout << "\n\t NULL";
-	}
-	else
-	{
-		registerddl* temp = R_head;
-		cout << "\n\t\t Enter Id You Want To Update = ";
-		cin >> id;
-		cout << "\n";
-		while (temp != NULL)
-		{
-			if (id == temp->ID)
-			{
-				cout << "\n\t\t The Id : ";
-				cin >> temp->ID;
-				cout << "\n\t\t The Name : ";
-				cin >> temp->Name;
-				cout << "\n\t\t The Phone No# : ";
-				cin >> temp->PhoneNo;
-				cout << "\n\t\tStudent(Yes Or No) : ";
-				cin >> temp->Student;
-				cout << "\n\t\t Institute Name ";
-				cin >> temp->Institute;
-			}
-			temp = temp->next;
-		}
-	}
-}
-
-void R_delete(int id)
-{
-	registerddl* p, * q;
-	q = R_head;
-	p = R_head->next;
-	if (q->ID == id)
-	{
-		R_head = p;
-		delete(q);
-	}
-	else
-	{
-		while (p->ID != id)
-		{
-			p = p->next;
-			q = q->next;
-		}
-		if (p->next == NULL)
-		{
-			q->next = NULL;
-			delete(p);
-		}
-		else
-		{
-			q->next = p->next;
-			p->next->prev = q;
-			delete(p);
-		}
-	}
-}
-
+void displayMovies(int d);
 //---------------------MovieFunction Block---------------------------------//
 struct Movieddl
 {
@@ -179,9 +20,9 @@ void addMoviedetails()
 	cout << "\n\t\t Movie Name:";
 	cin.ignore();
 	getline(cin, iname);
-	cout << "\n\t\t Venue Date:";
+	cout << "\n\t\t Movie Date:";
 	getline(cin, idate);
-	cout << "\n\t\t Venue Time:";
+	cout << "\n\t\t Movie Time:";
 	getline(cin, itime);
 	newnode->Movie_Name = iname;
 	newnode->Movie_Date = idate;
@@ -205,25 +46,38 @@ void addMoviedetails()
 		newnode->next = NULL;
 	}
 }
-void updateMovies(string mName)
+void updateMovies()
 {
+	string mName;
+u_M:
+	int d = 1;
+	displayMovies(d);
+	cout << "Enter Movie name you want to update: ";
+	cin.ignore();
+	getline(cin, mName);
 	Movieddl* temp = M_head;
 	while (temp != NULL)
 	{
-		if (temp->Movie_Name == mName)
+		if (mName == temp->Movie_Name)
 		{
-			cout << "\n\t\t Enter updated Movie_Name : ";
-			cin >> temp->Movie_Name;
+			cout << "\n\t\t Enter updated Movie Name : ";
+			getline(cin, temp->Movie_Name);
 			cout << "\n\t\t Enter updated Date : ";
-			cin >> temp->Movie_Date;
+			getline(cin, temp->Movie_Date);
 			cout << "\n\t\t Enter updated Time : ";
-			cin >> temp->Movie_Time;
+			getline(cin, temp->Movie_Time);
 			return;
+		}
+		else
+		{
+			cout << "Movie Not Found!, try again:";
+			system("pause");
+			system("cls");
+			goto u_M;
 		}
 		temp = temp->next;
 	}
 }
-
 void displayMovies(int d)
 {
 	fstream file, file2;
@@ -246,9 +100,9 @@ void displayMovies(int d)
 	{
 		while (temp != NULL)
 		{
-			cout << temp->Movie_Name << endl;
-			cout << temp->Movie_Date << endl;
-			cout << temp->Movie_Time << endl << endl;
+			cout << "\n\t\t Movie Name: " <<temp->Movie_Name << endl;
+			cout << "\n\t\t Movie Date: " << temp->Movie_Date << endl;
+			cout << "\n\t\t Movie Time: " << temp->Movie_Time << endl << endl;
 			temp = temp->next;
 		}
 	}
@@ -271,7 +125,7 @@ void deleteMovies(string m_name)
 	Movieddl* p, * q;
 	q = M_head;
 	p = M_head->next;
-	if (q->Movie_Name == m_name)
+	if (m_name == q->Movie_Name)
 	{
 		M_head = p;
 		delete(q);
@@ -290,7 +144,7 @@ void deleteMovies(string m_name)
 		}
 		else
 		{
-			q->next = p->next->prev;
+			q->next = p->next;
 			p->next->prev = q;
 			delete(p);
 		}
@@ -310,7 +164,7 @@ int searchmovie(string n_movie) {
 		temp = temp->next;
 	}
 }
-
+//-----------------------------------------------------BookTicket Block---------------------------------------------------
 int iAv_Ticket[7][7] = { NULL };
 void Display(int Payment);
 void ConfirmTransaction(int Av_Tickets[][7]);
@@ -420,6 +274,10 @@ void Display(int Payment)
 	string Movie_Name, Customer_Name, Customer_Number;
 	int x, TicketPrice = 600, totalPayment = 0, choice = 0;
 	char Student;
+	int d = 1;
+	cout << "\n\t\t--------------------------------------------\n";
+	displayMovies(d);
+	cout << "\n\t\t--------------------------------------------\n";
 	cout << "\n\t\t Enter Movie Name you want to see: ";
 	cin.ignore();
 	getline(cin, Movie_Name);
@@ -455,8 +313,8 @@ void Display(int Payment)
 			cout << "\n\t\t Price of Tickets after discout : " << TicketPrice << endl;
 			cout << "\n\t\t Amount of Tickets bought : " << Payment << endl;
 			cout << "\n\t\t The Total Bill : " << totalPayment << endl;
-			cout << "\n\t\t" << "Bill time : " << hour << ":" << minuts << ":" << sec << endl;
-			cout << "\n\t\t" << "Bill date : " << Day << "/" << Month << "/" << Year << endl;
+			cout << "\n\t\t Bill time : " << hour << ":" << minuts << ":" << sec << endl;
+			cout << "\n\t\t Bill date : " << Day << "/" << Month << "/" << Year << endl;
 			cout << "\n\t\t--------------------------------------------\n";
 			//----------------------------------Saving bill through file handling--------------------------------------------------//
 			file << "\n\t\t--------------------------------------------\n";
@@ -509,10 +367,7 @@ void Display(int Payment)
 	}
 	file.close();
 }
-
-
 //------------------------------------------MAIN FUNCTION------------------------------------//
-
 int main()
 {
 	int d;
@@ -578,96 +433,11 @@ Admin_Login:
 Admin_Block:
 	cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 	cout << "\t\t\t\t\t~~~~~ ADMIN ~~~~~\n";
-	cout << "\n\n\t\t1) Register Users \n\n\t\t2) Book and Update Tickets \n\n\t\t3) Add or Update Movies \n\n\t\t4) View Movies \n\n\t\tYour Choice: ";
+	cout << "\n\n\t\t1) Add or Update Movies \n\n\t\t2) Book and Update Tickets \n\n\t\t3) View Movies \n\n\t\t4) Logout \n\n\t\tYour Choice: ";
 	int Admin_Choice;
 	int display;
 	cin >> Admin_Choice;
-	if (Admin_Choice == 1)//Register Users 
-	{
-	Reg_User_Page:
-		system("cls");
-		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
-		cout << "\t\t\t\t~~~~~ Register New Users ~~~~~\n\n";
-		cout << "\n\n\t\t1) Register New User \n\n\t\t2) Update User \n\n\t\t3) Delete User \n\n\t\t4) Display Reg User \n\n\t\t5) Back Page \n\n\t\tYour Choice: ";
-		int Reg_User_Choice;
-		cin >> Reg_User_Choice;
-		if (Reg_User_Choice == 1)
-		{
-			system("cls");
-			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
-			cout << "\t\t\t\t~~~~~ Register New Users ~~~~~\n\n";
-			display = 0;
-			RegisterUser();
-			R_display(display);
-			system("pause");
-			system("cls");
-			goto Reg_User_Page;
-		}
-		else if (Reg_User_Choice == 2)
-		{
-			system("cls");
-			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
-			cout << "\t\t\t\t~~~~~ Register New Users ~~~~~\n\n";
-			display = 0;
-			R_update();
-			R_display(display);
-			system("pause");
-			system("cls");
-			goto Reg_User_Page;
-		}
-		else if (Reg_User_Choice == 3)
-		{
-			system("cls");
-			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
-			cout << "\t\t\t\t~~~~~ Delete Users ~~~~~\n\n";
-			display = 0;
-			int id;
-			cout << "\n\n\t\tEnter the id of the user you want to delete: ";
-			cin >> id;
-			R_delete(id);
-			R_display(display);
-			system("pause");
-			system("cls");
-			goto Reg_User_Page;
-		}
-		else if (Reg_User_Choice == 4)
-		{
-			system("cls");
-			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
-			cout << "\t\t\t\t~~~~~ Display Users ~~~~~\n\n";
-			display = 1;
-			R_display(display);
-			system("pause");
-			system("cls");
-			goto Reg_User_Page;
-		}
-		else if (Reg_User_Choice == 5)
-		{
-			system("cls");
-			goto Admin_Block;
-		}
-		else
-		{
-			cout << "\t\t\tWrong Input!";
-			system("pause");
-			system("cls");
-			goto Reg_User_Page;
-		}
-
-	}
-	else if (Admin_Choice == 2)//Book Ticket and Update Ticket {Remaining}
-	{
-		system("cls");
-		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
-		cout << "\t\t\t\t~~~~~ Book/Update/Delete Ticket ~~~~~\n\n";
-		BookTicket();
-		Booked_Tickets();
-		system("pause");
-		system("cls");
-		goto Admin_Block;
-
-	}
-	else if (Admin_Choice == 3)//Add and Update Movies
+	if (Admin_Choice == 1)//Add and Update Movies
 	{
 	Add_Movie_Block:
 		system("cls");
@@ -695,8 +465,7 @@ Admin_Block:
 			system("cls");
 			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 			cout << "\t\t\t\t~~~~~ Update Movies ~~~~~\n\n";
-			string M_Name;
-			updateMovies(M_Name);
+			updateMovies();
 			displayMovies(d);
 			system("pause");
 			system("cls");
@@ -704,15 +473,18 @@ Admin_Block:
 		}
 		else if (Movies_User_Choice == 3)
 		{
-			d = 0;
 			system("cls");
 			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 			cout << "\t\t\t\t~~~~~ Delete Movies ~~~~~\n\n";
 			display = 0;
 			string M_Name;
-			cout << "\n\n\t\tEnter the id of the user you want to delete: ";
-			cin >> M_Name;
+			d = 1;
+			displayMovies(d);
+			cout << "\n\n\t\tEnter the Name of the Movie you want to delete: ";
+			cin.ignore();
+			getline(cin,M_Name);
 			deleteMovies(M_Name);
+			d = 0;
 			displayMovies(d);
 			system("pause");
 			system("cls");
@@ -743,10 +515,20 @@ Admin_Block:
 		}
 
 	}
-
-	else if (Admin_Choice == 4)//View Movies
+	else if (Admin_Choice == 2)//Book Ticket and Update Ticket {Remaining}
 	{
+		system("cls");
+		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
+		cout << "\t\t\t\t~~~~~ Book/Update/Delete Ticket ~~~~~\n\n";
+		BookTicket();
+		Booked_Tickets();
+		system("pause");
+		system("cls");
+		goto Admin_Block;
 
+	}
+	else if (Admin_Choice == 3)//View Movies
+	{
 		d = 1;
 		system("cls");
 		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
@@ -755,6 +537,10 @@ Admin_Block:
 		system("pause");
 		system("cls");
 		goto Add_Movie_Block;
+	}
+	else if (Admin_Choice == 4)
+	{
+		exit(1);
 	}
 	else
 	{
