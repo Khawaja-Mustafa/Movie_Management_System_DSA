@@ -225,23 +225,34 @@ void updateMovies(string mName)
 	}
 }
 
-void displayMovies()
+void displayMovies(int d)
 {
 	fstream file, file2;
 	Movieddl* temp = M_head;
-
-	file2.open("Movie_Details.txt", ios::in | ios::out | ios::trunc);
-	file.open("Movie_Details.txt", ios::in | ios::out | ios::app);
-	while (temp != NULL)
+	if(d==0)
 	{
-
-		file << temp->Movie_Name << endl;
-		file << temp->Movie_Date << endl;
-		file << temp->Movie_Time << endl << endl;
-		temp = temp->next;
+		file2.open("Movie_Details.txt", ios::in | ios::out | ios::trunc);
+		file.open("Movie_Details.txt", ios::in | ios::out | ios::app);
+		while (temp != NULL)
+		{
+			file << temp->Movie_Name << endl;
+			file << temp->Movie_Date << endl;
+			file << temp->Movie_Time << endl << endl;
+			temp = temp->next;
+		}
+		file2.close();
+		file.close();
 	}
-	file2.close();
-	file.close();
+	else if(d==1)
+	{
+		while (temp != NULL)
+		{
+			cout << temp->Movie_Name << endl;
+			cout << temp->Movie_Date << endl;
+			cout << temp->Movie_Time << endl << endl;
+			temp = temp->next;
+		}
+	}
 
 }
 void view_movies()
@@ -286,11 +297,172 @@ void deleteMovies(string m_name)
 		}
 	}
 }
+int searchmovie(string n_movie) {
+	Movieddl* temp = M_head;
+	while (temp != NULL) {
+		if (n_movie == temp->Movie_Name) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+		temp = temp->next;
+	}
+}
+
+int iAv_Ticket[7][7] = { NULL };
+void Display(int Payment);
+void ConfirmTransaction(int Av_Tickets[][7]);
+void BookTicket()
+{
+	char choice_B;
+	for (int i = 0; i < 7; i++) //49 Table outputs
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			cout << "\t| " << i << j << " |\t";
+		}
+		cout << endl << endl;
+	}
+
+	for (int i = 0; i < 7; i++)//Booking
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			cout << "Do you want to book a Seat/ticket? (Y/N):";
+			cin >> choice_B;
+			if (choice_B == 'Y' || choice_B == 'y')
+			{
+				cout << "Select Row and Column (0 1) :";
+				cin >> i >> j;
+				iAv_Ticket[i][j] = 1;
+				i = 0; // i = 0, j = 0 for running program on i = 6, j = 6.
+				j = 0;
+			}
+			else if (choice_B == 'N' || choice_B == 'n')
+			{
+				i = 6;
+				j = 6;
+				system("cls");
+				break;//breaks the loop
+			}
+			else
+			{
+				cout << "\n\nWrong Input!\n\n";
+			}
+		}
+	}
+}
+void Booked_Tickets()
+{
+	char choice_b = ' ';
+	cout << "\t\t\t******************************************************\n";
+	cout << "\t\t\t\t\tMovie Management System\n";
+	cout << "\t\t\t******************************************************\n\n";
+	cout << "\t\t\t\t\t<<<<<< Seat Left >>>>>>\n\n";
+	string text;
+	for (int i = 0; i < 7; i++)//Determines Seat booking
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			if (iAv_Ticket[i][j] == 0)
+			{
+				cout << "\t| " << i << j << " |\t";
+			}
+			else
+			{
+				cout << "\t| " << "XX" << " |\t";
+
+			}
+
+		}
+		cout << "\n\n";
+	}
+	cout << "\t\t";
+	ConfirmTransaction(iAv_Ticket);
+}
+void ConfirmTransaction(int Av_Tickets[][7])
+{
+	int Payment = 0;
+	//Transaction Operation
+	for (int i = 0; i < 7; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			if (Av_Tickets[i][j] == 1)
+			{
+				Payment++;
+			}
+			else
+			{
+				continue;
+			}
+		}
+	}
+	Display(Payment);
+}
+void Display(int Payment)
+{
+	string Movie_Name;
+	int x;
+	int TicketPrice = 600;
+	int totalPayment = 0;
+	int choice = 0;
+	char Student;
+	cin.ignore();
+	getline(cin, Movie_Name);
+	x= searchmovie(Movie_Name);
+	if (x == 1) 
+	{
+		//searchFun(Movie Name);
+		//Fourth Node -> Batman -> h1 -> 30 05 2000
+		string institute_N, program;
+		cout << "\n\t\t\t\t" << "Student : ";
+		cin >> Student;
+		if (Student == 'y' || Student == 'Y')
+		{
+			cout << "Enter Institution name: ";
+			string institution;
+			cin.ignore();
+			getline(cin, institution);
+			cout << endl;
+			system("pause");
+			system("cls");
+			TicketPrice = 300;
+			cout << "\n\t\t\t\t" << "Movie Name : " << Movie_Name << endl;
+			//cout << "\n\t\t\t\t" << "Movie Venue : " << Movie_Venue[0] << endl;
+			//cout << "\n\t\t\t\t" << "Movie Date : " << day[0] << "/" << month[0] << "/" << year[0] << endl;
+			totalPayment = Payment * TicketPrice;
+			cout << "\n\t\t\t\t" << "Price of Tickets : " << TicketPrice << endl;
+			cout << "\n\t\t\t\t" << "Amount of Tickets : " << Payment << endl;
+			cout << "\n\t\t\t\t" << "The Total Bill : " << totalPayment << endl;
+			Payment = 0;
+		}
+		else
+		{
+			system("pause");
+			system("cls");
+			cout << "\n\t\t\t\t" << "Movie Name : " << Movie_Name << endl;
+			//cout << "\n\t\t\t\t" << "Movie Venue : " << Movie_Venue[0] << endl;
+			//cout << "\n\t\t\t\t" << "Movie Date : " << day[0] << "/" << month[0] << "/" << year[0] << endl;
+			totalPayment = Payment * TicketPrice;
+			cout << "\n\t\t\t\t" << "Price of Tickets : " << TicketPrice << endl;
+			cout << "\n\t\t\t\t" << "Amount of Tickets : " << Payment << endl;
+			cout << "\n\t\t\t\t" << "The Total Bill : " << totalPayment << endl;
+			Payment = 0;
+		}
+	}
+	else 
+	{
+		cout << "Movie not found\n";
+	}
+}
 
 
 //-----------------------------------------------------------MAIN FUNCTION---------------------------------------------------------------------
 int main()
 {
+	int d;
 	int loginchances = 3;
 	Main_Page:
 	int i = 0;
@@ -433,6 +605,8 @@ Admin_Block:
 		system("cls");
 		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 		cout << "\t\t\t\t~~~~~ Book/Update/Delete Ticket ~~~~~\n\n";
+		BookTicket();
+		Booked_Tickets();
 
 
 	}
@@ -447,30 +621,33 @@ Admin_Block:
 		cin >> Movies_User_Choice;
 		if (Movies_User_Choice == 1)
 		{
+			d = 0;
 			system("cls");
 			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 			cout << "\t\t\t\t~~~~~ Add Movies ~~~~~\n\n";
 			display = 0;
 			addMoviedetails();
-			displayMovies();
+			displayMovies(d);
 			system("pause");
 			system("cls");
 			goto Add_Movie_Block;
 		}
 		else if (Movies_User_Choice == 2)
 		{
+			d = 0;
 			system("cls");
 			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 			cout << "\t\t\t\t~~~~~ Update Movies ~~~~~\n\n";
 			string M_Name;
 			updateMovies(M_Name);
-			displayMovies();
+			displayMovies(d);
 			system("pause");
 			system("cls");
 			goto Add_Movie_Block;
 		}
 		else if (Movies_User_Choice == 3)
 		{
+			d = 0;
 			system("cls");
 			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 			cout << "\t\t\t\t~~~~~ Delete Movies ~~~~~\n\n";
@@ -479,17 +656,18 @@ Admin_Block:
 			cout << "\n\n\t\tEnter the id of the user you want to delete: ";
 			cin >> M_Name;
 			deleteMovies(M_Name);
-			displayMovies();
+			displayMovies(d);
 			system("pause");
 			system("cls");
 			goto Add_Movie_Block;
 		}
 		else if (Movies_User_Choice == 4)
 		{
+			d = 1;
 			system("cls");
 			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 			cout << "\t\t\t\t~~~~~ Display Movies ~~~~~\n\n";
-			displayMovies();
+			displayMovies(d);
 			system("pause");
 			system("cls");
 			goto Add_Movie_Block;
@@ -518,10 +696,12 @@ Admin_Block:
 	}
 	else if (Admin_Choice == 5)//View Movies
 	{
+
+		d = 1;
 		system("cls");
 		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 		cout << "\t\t\t\t\t~~~~~ View Movies ~~~~~\n\n";
-		displayMovies();
+		displayMovies(d);
 		system("pause");
 		system("cls");
 		goto Add_Movie_Block;
