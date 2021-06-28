@@ -2,7 +2,6 @@
 #include <string>
 #include <fstream>
 using namespace std;
-
 struct registerddl
 {
 	int ID;
@@ -36,7 +35,7 @@ void RegisterUser()
 	else
 	{
 		institute = "None";
-		cout << "\t\t\tEnter Institute Name : "<< institute << "\n";
+		cout << "\t\t\tEnter Institute Name : " << institute <<"\n";
 	}
 	newnode->ID = iId;
 	newnode->Address = iAddress;
@@ -61,7 +60,8 @@ void RegisterUser()
 		temp->next = newnode;
 		newnode->prev = temp;
 		newnode->next = NULL;
-	}	
+	}
+	
 }
 void R_display(int idisplay)
 {
@@ -131,6 +131,7 @@ void R_update()
 			}
 		}
 }
+
 void R_delete(int id)
 {
 	registerddl* p, * q;
@@ -162,6 +163,132 @@ void R_delete(int id)
 	}
 }
 
+//---------------------MovieFunction Block---------------------------------
+struct Movieddl
+{
+	string Movie_Name, Movie_Date, Movie_Time;
+	Movieddl* next;
+	Movieddl* prev;
+};
+Movieddl* M_head = NULL;
+void addMoviedetails()
+{
+	Movieddl* newnode = new Movieddl();
+	string iname, idate, itime;
+	cout << "Movie Movie_Name:";
+	cin.ignore();
+	getline(cin, iname);
+	cout << "\nVenue Date:";
+	cin.ignore();
+	getline(cin, idate);
+	cout << "\nVenue Time:";
+	cin.ignore();
+	getline(cin, itime);
+	newnode->Movie_Name = iname;
+	newnode->Movie_Date = idate;
+	newnode->Movie_Time = itime;
+	if (M_head == NULL)
+	{
+		newnode->next = NULL;
+		newnode->prev = NULL;
+		M_head = newnode;
+		return;
+	}
+	else
+	{
+		Movieddl* temp = M_head;
+		while (temp->next != NULL)
+		{
+			temp = temp->next;
+		}
+		temp->next = newnode;
+		newnode->prev = temp->next;
+		newnode->next = NULL;
+	}
+}
+void updateMovies(string mName)
+{
+	Movieddl* temp = M_head;
+	while (temp != NULL)
+	{
+		if (temp->Movie_Name == mName)
+		{
+			cout << "Enter updated Movie_Name : ";
+			cin >> temp->Movie_Name;
+			cout << "Enter updated Date : ";
+			cin >> temp->Movie_Date;
+			cout << "Enter updated Time : ";
+			cin >> temp->Movie_Time;
+			return;
+		}
+		temp = temp->next;
+	}
+}
+
+void displayMovies()
+{
+	fstream file, file2;
+	Movieddl* temp = M_head;
+
+	file2.open("Movie_Details.txt", ios::in | ios::out | ios::trunc);
+	file.open("Movie_Details.txt", ios::in | ios::out | ios::app);
+	while (temp != NULL)
+	{
+
+		file << temp->Movie_Name << endl;
+		file << temp->Movie_Date << endl;
+		file << temp->Movie_Time << endl << endl;
+		temp = temp->next;
+	}
+	file2.close();
+	file.close();
+
+}
+void view_movies()
+{
+	fstream file, file2;
+	file.open("Movie_Details.txt", ios::in | ios::out);
+	string text;
+	while (!file.eof())
+	{
+		getline(file, text);
+		cout << text << endl;
+	}
+	file.close();
+}
+void deleteMovies(string m_name)
+{
+	Movieddl* p, * q;
+	q = M_head;
+	p = M_head->next;
+	if (q->Movie_Name == m_name)
+	{
+		M_head = p;
+		delete(q);
+	}
+	else
+	{
+		while (p->Movie_Name != m_name)
+		{
+			p = p->next;
+			q = q->next;
+		}
+		if (p->next == NULL)
+		{
+			q->next = NULL;
+			delete(p);
+		}
+		else
+		{
+			q->next = p->next->prev;
+			p->next->prev = q;
+			delete(p);
+		}
+	}
+}
+
+
+//-----------------------------------------------------------MAIN FUNCTION---------------------------------------------------------------------
 int main()
 {
 	int loginchances = 3;
@@ -192,7 +319,7 @@ int main()
 	cout << "\n\n\t\tAdmin Password: ";
 	cin.ignore();
 	getline(cin, Admin_Pass);
-	if(Admin_ID == 123 && Admin_Pass == "Khawaja172")
+	if(Admin_ID == 123 && Admin_Pass == "123")
 	{
 		system("cls");
 		cout << "\n\n\t\t <<<Welcome Khawaja>>> \n\n";
@@ -228,7 +355,7 @@ Admin_Block:
 	int Admin_Choice;
 	int display;
 	cin >> Admin_Choice;
-	if(Admin_Choice == 1)
+	if(Admin_Choice == 1)//Register Users 
 	{
 		Reg_User_Page:
 		system("cls");
@@ -265,7 +392,7 @@ Admin_Block:
 		{
 			system("cls");
 			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
-			cout << "\t\t\t\t~~~~~ Register New Users ~~~~~\n\n";
+			cout << "\t\t\t\t~~~~~ Delete Users ~~~~~\n\n";
 			display = 0;
 			int id;
 			cout << "\n\n\t\tEnter the id of the user you want to delete: ";
@@ -280,7 +407,7 @@ Admin_Block:
 		{
 			system("cls");
 			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
-			cout << "\t\t\t\t~~~~~ Register New Users ~~~~~\n\n";
+			cout << "\t\t\t\t~~~~~ Display Users ~~~~~\n\n";
 			display = 1;
 			R_display(display);
 			system("pause");
@@ -292,31 +419,112 @@ Admin_Block:
 			system("cls");
 			goto Admin_Block;
 		}
+		else
+		{
+			cout << "\t\t\tWrong Input!";
+			system("pause");
+			system("cls");
+			goto Reg_User_Page;
+		}
 		
 	}
-	else if(Admin_Choice == 2)
+	else if(Admin_Choice == 2)//Book Ticket and Update Ticket {Remaining}
 	{
 		system("cls");
 		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 		cout << "\t\t\t\t~~~~~ Book/Update/Delete Ticket ~~~~~\n\n";
+
+
 	}
-	else if(Admin_Choice == 3)
+	else if(Admin_Choice == 3)//Add and Update Movies
 	{
+		Add_Movie_Block:
 		system("cls");
 		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 		cout << "\t\t\t\t~~~~~ Add/Update/Delete Movies ~~~~~\n\n";
+		cout << "\n\n\t\t1) Add Movies \n\n\t\t2) Update Movies \n\n\t\t3) Delete Movies \n\n\t\t4) Display Movies \n\n\t\t5) Back Page \n\n\t\tYour Choice: ";
+		int Movies_User_Choice;
+		cin >> Movies_User_Choice;
+		if (Movies_User_Choice == 1)
+		{
+			system("cls");
+			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
+			cout << "\t\t\t\t~~~~~ Add Movies ~~~~~\n\n";
+			display = 0;
+			addMoviedetails();
+			displayMovies();
+			system("pause");
+			system("cls");
+			goto Add_Movie_Block;
+		}
+		else if (Movies_User_Choice == 2)
+		{
+			system("cls");
+			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
+			cout << "\t\t\t\t~~~~~ Update Movies ~~~~~\n\n";
+			string M_Name;
+			updateMovies(M_Name);
+			displayMovies();
+			system("pause");
+			system("cls");
+			goto Add_Movie_Block;
+		}
+		else if (Movies_User_Choice == 3)
+		{
+			system("cls");
+			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
+			cout << "\t\t\t\t~~~~~ Delete Movies ~~~~~\n\n";
+			display = 0;
+			string M_Name;
+			cout << "\n\n\t\tEnter the id of the user you want to delete: ";
+			cin >> M_Name;
+			deleteMovies(M_Name);
+			displayMovies();
+			system("pause");
+			system("cls");
+			goto Add_Movie_Block;
+		}
+		else if (Movies_User_Choice == 4)
+		{
+			system("cls");
+			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
+			cout << "\t\t\t\t~~~~~ Display Movies ~~~~~\n\n";
+			displayMovies();
+			system("pause");
+			system("cls");
+			goto Add_Movie_Block;
+		}
+		else if (Movies_User_Choice == 5)
+		{
+			system("cls");
+			goto Admin_Block;
+		}
+		else
+		{
+			cout << "\t\t\tWrong Input!";
+			system("pause");
+			system("cls");
+			goto Add_Movie_Block;
+		}
+
 	}
-	else if (Admin_Choice == 4)
+	else if (Admin_Choice == 4)//Print or Update BIll{Remaining}
 	{
 		system("cls");
 		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
-		cout << "\t\t\t\t~~~~~ Print or Update Bill ~~~~~\n\n";
+		cout << "\t\t\t\t~~~~~ Print/Update/Delete Bill ~~~~~\n\n";
+
+
 	}
-	else if (Admin_Choice == 5)
+	else if (Admin_Choice == 5)//View Movies
 	{
 		system("cls");
 		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 		cout << "\t\t\t\t\t~~~~~ View Movies ~~~~~\n\n";
+		displayMovies();
+		system("pause");
+		system("cls");
+		goto Add_Movie_Block;
 	}
 	else 
 	{
