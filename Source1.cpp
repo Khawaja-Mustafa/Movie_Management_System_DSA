@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <ctime>
 using namespace std;
+void dateAndTime();
 struct registerddl
 {
 	int ID;
@@ -174,14 +176,12 @@ void addMoviedetails()
 {
 	Movieddl* newnode = new Movieddl();
 	string iname, idate, itime;
-	cout << "Movie Movie_Name:";
+	cout << "\n\t\t Movie Name:";
 	cin.ignore();
 	getline(cin, iname);
-	cout << "\nVenue Date:";
-	cin.ignore();
+	cout << "\n\t\t Venue Date:";
 	getline(cin, idate);
-	cout << "\nVenue Time:";
-	cin.ignore();
+	cout << "\n\t\t Venue Time:";
 	getline(cin, itime);
 	newnode->Movie_Name = iname;
 	newnode->Movie_Date = idate;
@@ -212,11 +212,11 @@ void updateMovies(string mName)
 	{
 		if (temp->Movie_Name == mName)
 		{
-			cout << "Enter updated Movie_Name : ";
+			cout << "\n\t\t Enter updated Movie_Name : ";
 			cin >> temp->Movie_Name;
-			cout << "Enter updated Date : ";
+			cout << "\n\t\t Enter updated Date : ";
 			cin >> temp->Movie_Date;
-			cout << "Enter updated Time : ";
+			cout << "\n\t\t Enter updated Time : ";
 			cin >> temp->Movie_Time;
 			return;
 		}
@@ -299,10 +299,12 @@ void deleteMovies(string m_name)
 int searchmovie(string n_movie) {
 	Movieddl* temp = M_head;
 	while (temp != NULL) {
-		if (n_movie == temp->Movie_Name) {
+		if (n_movie == temp->Movie_Name) 
+		{
 			return 1;
 		}
-		else {
+		else 
+		{
 			return 0;
 		}
 		temp = temp->next;
@@ -328,11 +330,11 @@ void BookTicket()
 	{
 		for (int j = 0; j < 7; j++)
 		{
-			cout << "Do you want to book a Seat/ticket? (Y/N):";
+			cout << "\n\t\t Do you want to book a Seat/ticket? (Y/N):";
 			cin >> choice_B;
 			if (choice_B == 'Y' || choice_B == 'y')
 			{
-				cout << "Select Row and Column (0 1) :";
+				cout << "\n\t\t Select Row and Column (0 1) :";
 				cin >> i >> j;
 				iAv_Ticket[i][j] = 1;
 				i = 0; // i = 0, j = 0 for running program on i = 6, j = 6.
@@ -347,7 +349,7 @@ void BookTicket()
 			}
 			else
 			{
-				cout << "\n\nWrong Input!\n\n";
+				cout << "\n\n\t\t Wrong Input!\n\n";
 			}
 		}
 	}
@@ -403,23 +405,41 @@ void ConfirmTransaction(int Av_Tickets[][7])
 }
 void Display(int Payment)
 {
-	string Movie_Name;
-	int x;
-	int TicketPrice = 600;
-	int totalPayment = 0;
-	int choice = 0;
+	//For Current Time and Date
+	struct tm newtime;
+	time_t t = time(0);
+	localtime_s(&newtime, &t);
+	int Month = 1 + newtime.tm_mon;
+	int Day = newtime.tm_mday;
+	int Year = newtime.tm_year + 1900;
+	int hour = newtime.tm_hour;
+	int minuts = newtime.tm_min;
+	int sec = newtime.tm_sec;
+	//-----------------------------
+
+	string Movie_Name, Customer_Name, Customer_Number;
+	int x, TicketPrice = 600, totalPayment = 0, choice = 0;
 	char Student;
+	cout << "\n\t\t Enter Movie Name you want to see: ";
 	cin.ignore();
 	getline(cin, Movie_Name);
+	cout << "\n\t\t Enter Your Name: ";
+	getline(cin, Customer_Name);
+	cout << "\n\t\t Enter Your Contact Number: ";
+	getline(cin, Customer_Number);
 	x = searchmovie(Movie_Name);
+
+	fstream file;
+	file.open("Bill.txt", ios::in | ios::out | ios::app);
 	if (x == 1)
 	{
 		string institute_N, program;
-		cout << "\n\t\t\t\t" << "Student (Y/N) : ";
+		cout << "\n\t\t Student (Y/N) : ";
 		cin >> Student;
 		if (Student == 'y' || Student == 'Y')
 		{
-			cout << "\n\t\t\t\t" << "Enter Institution name: ";
+			cout << "\n\t\t Discount of 50% is given to students per ticket!\n";
+			cout << "\n\t\t Enter Institution name: ";
 			string institution;
 			cin.ignore();
 			getline(cin, institution);
@@ -427,30 +447,69 @@ void Display(int Payment)
 			system("pause");
 			system("cls");
 			TicketPrice = 300;
-			cout << "\n\t\t\t\t" << "Movie Name : " << Movie_Name << endl;
+			cout << "\n\t\t--------------------------------------------\n";
+			cout << "\n\t\t Customer Name : " << Customer_Name << endl;
+			cout << "\n\t\t Customer Contact N0# : " << Customer_Number << endl;
+			cout << "\n\t\t Movie Name : " << Movie_Name << endl;
 			totalPayment = Payment * TicketPrice;
-			cout << "\n\t\t\t\t" << "Price of Tickets : " << TicketPrice << endl;
-			cout << "\n\t\t\t\t" << "Amount of Tickets : " << Payment << endl;
-			cout << "\n\t\t\t\t" << "The Total Bill : " << totalPayment << endl;
+			cout << "\n\t\t Price of Tickets after discout : " << TicketPrice << endl;
+			cout << "\n\t\t Amount of Tickets bought : " << Payment << endl;
+			cout << "\n\t\t The Total Bill : " << totalPayment << endl;
+			cout << "\n\t\t" << "Bill time : " << hour << ":" << minuts << ":" << sec << endl;
+			cout << "\n\t\t" << "Bill date : " << Day << "/" << Month << "/" << Year << endl;
+			cout << "\n\t\t--------------------------------------------\n";
+			//----------------------------------Saving bill through file handling--------------------------------------------------//
+			file << "\n\t\t--------------------------------------------\n";
+			file << "\n\t\t Customer Name : " << Customer_Name << endl;
+			file << "\n\t\t Customer Contact N0# : " << Customer_Number << endl;
+			file << "\n\t\t Movie Name : " << Movie_Name << endl;
+			totalPayment = Payment * TicketPrice;
+			file << "\n\t\t Price of Tickets after discout : " << TicketPrice << endl;
+			file << "\n\t\t Amount of Tickets bought : " << Payment << endl;
+			file << "\n\t\t The Total Bill : " << totalPayment << endl;
+			file << "\n\t\t Bill time : " << hour << ":" << minuts << ":" << sec << endl;
+			file << "\n\t\t Bill date : " << Day << "/" << Month << "/" << Year << endl;
+			file << "\n\t\t--------------------------------------------\n";
 			Payment = 0;
 		}
 		else
 		{
 			system("pause");
 			system("cls");
-			cout << "\n\t\t\t\t" << "Movie Name : " << Movie_Name << endl;
+			cout << "\n\t\t--------------------------------------------\n";
+			cout << "\n\t\t Customer Name : " << Customer_Name << endl;
+			cout << "\n\t\t Customer Contact N0# : " << Customer_Number << endl;
+			cout << "\n\t\t Movie Name : " << Movie_Name << endl;
 			totalPayment = Payment * TicketPrice;
-			cout << "\n\t\t\t\t" << "Price of Tickets : " << TicketPrice << endl;
-			cout << "\n\t\t\t\t" << "Amount of Tickets : " << Payment << endl;
-			cout << "\n\t\t\t\t" << "The Total Bill : " << totalPayment << endl;
+			cout << "\n\t\t Price of Tickets : " << TicketPrice << endl;
+			cout << "\n\t\t Amount of Tickets : " << Payment << endl;
+			cout << "\n\t\t The Total Bill : " << totalPayment << endl;
+			cout << "\n\t\t Bill time : " << hour << ":" << minuts << ":" << sec << endl;
+			cout << "\n\t\t Bill date : " << Day << "/" << Month << "/" << Year << endl;
+			cout << "\n\t\t--------------------------------------------\n";
+
+			file << "\n\t\t--------------------------------------------\n";
+			file << "\n\t\t Customer Name : " << Customer_Name << endl;
+			file << "\n\t\t Customer Contact N0# : " << Customer_Number << endl;
+			file << "\n\t\t Movie Name : " << Movie_Name << endl;
+			totalPayment = Payment * TicketPrice;
+			file << "\n\t\t Price of Tickets : " << TicketPrice << endl;
+			file << "\n\t\t Amount of Tickets : " << Payment << endl;
+			file << "\n\t\t The Total Bill : " << totalPayment << endl;
+			file << "\n\t\t Bill time : " << hour << ":" << minuts << ":" << sec << endl;
+			file << "\n\t\t Bill date : " << Day << "/" << Month << "/" << Year << endl;
+			file << "\n\t\t--------------------------------------------\n";
+
 			Payment = 0;
 		}
 	}
 	else
 	{
-		cout << "Movie not found\n";
+		cout << "\n\t\t Movie not found\n";
 	}
+	file.close();
 }
+
 
 //------------------------------------------MAIN FUNCTION------------------------------------//
 
@@ -596,7 +655,9 @@ Admin_Block:
 		cout << "\t\t\t\t~~~~~ Book/Update/Delete Ticket ~~~~~\n\n";
 		BookTicket();
 		Booked_Tickets();
-
+		system("pause");
+		system("cls");
+		goto Admin_Block;
 
 	}
 	else if (Admin_Choice == 3)//Add and Update Movies
@@ -675,7 +736,7 @@ Admin_Block:
 		}
 
 	}
-	
+
 	else if (Admin_Choice == 4)//View Movies
 	{
 
