@@ -154,17 +154,20 @@ void deleteMovies(string m_name)
 }
 int searchmovie(string n_movie) {
 	Movieddl* temp = M_head;
-	while (temp != NULL) {
+	int flag = 0;
+	while (temp != NULL) 
+	{
 		if (n_movie == temp->Movie_Name) 
 		{
+			flag++;
 			return 1;
-		}
-		else 
-		{
-			return 0;
 		}
 		temp = temp->next;
 	}
+	if(flag == 0)
+		{
+			return 0;
+		}
 }
 //-----------------------------------------------------BookTicket Block---------------------------------------------------
 int iAv_Ticket[7][7] = { NULL };
