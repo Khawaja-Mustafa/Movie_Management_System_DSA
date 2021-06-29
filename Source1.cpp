@@ -122,8 +122,12 @@ void view_movies()
 	}
 	file.close();
 }
-void deleteMovies(string m_name)
+void deleteMovies()
 {
+	string m_name;
+	cout << "\n\n\t\tEnter the Name of the Movie you want to delete: ";
+	cin.ignore();
+	getline(cin, m_name);
 	Movieddl* p, * q;
 	q = M_head;
 	p = M_head->next;
@@ -131,6 +135,7 @@ void deleteMovies(string m_name)
 	{
 		M_head = p;
 		delete(q);
+		p->prev = NULL;
 	}
 	else
 	{
@@ -500,10 +505,7 @@ Admin_Block:
 			string M_Name;
 			d = 1;
 			displayMovies(d);
-			cout << "\n\n\t\tEnter the Name of the Movie you want to delete: ";
-			cin.ignore();
-			getline(cin,M_Name);
-			deleteMovies(M_Name);
+			deleteMovies();
 			d = 0;
 			displayMovies(d);
 			system("pause");
