@@ -405,6 +405,13 @@ Main_Page:
 		system("cls");
 		goto Admin_Login;
 	}
+	else
+	{
+		cout << "\n\t\tWrong choice selected!\n";
+		system("pause");
+		system("cls");
+		goto Main_Page;
+	}
 	//+++++++++++++++++++++++++++++Admin Block+++++++++++++++++++++++++++++++++++++++++++++++++++++
 Admin_Login:
 	int Admin_ID;
