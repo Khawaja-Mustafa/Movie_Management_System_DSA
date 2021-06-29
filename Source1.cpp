@@ -90,9 +90,9 @@ void displayMovies(int d)
 		file.open("Movie_Details.txt", ios::in | ios::out | ios::app);
 		while (temp != NULL)
 		{
-			file << temp->Movie_Name << endl;
-			file << temp->Movie_Date << endl;
-			file << temp->Movie_Time << endl << endl;
+			file << "\n\t\t Movie Name: " <<temp->Movie_Name << endl;
+			file << "\n\t\t Movie Date: " << temp->Movie_Date << endl;
+			file << "\n\t\t Movie Timw: " << temp->Movie_Time << endl << endl;
 			temp = temp->next;
 		}
 		file2.close();
@@ -118,7 +118,7 @@ void view_movies()
 	while (!file.eof())
 	{
 		getline(file, text);
-		cout << text << endl;
+		cout << "\n\t\t" << text << endl;
 	}
 	file.close();
 }
@@ -157,7 +157,8 @@ void deleteMovies()
 		}
 	}
 }
-int searchmovie(string n_movie) {
+int searchmovie(string n_movie) 
+{
 	Movieddl* temp = M_head;
 	int flag = 0;
 	while (temp != NULL) 
@@ -393,6 +394,7 @@ void Display(int Payment)
 int main()
 {
 	int d;
+	int choice_choice = 0;
 	int loginchances = 3;
 Main_Page:
 	int i = 0;
@@ -477,6 +479,8 @@ Admin_Block:
 		cin >> Movies_User_Choice;
 		if (Movies_User_Choice == 1)
 		{
+			
+			choice_choice++;
 			d = 0;
 			system("cls");
 			cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
@@ -559,7 +563,14 @@ Admin_Block:
 		system("cls");
 		cout << "\t\t\t\t~~~~~ Movie Management System ~~~~~\n";
 		cout << "\t\t\t\t\t~~~~~ View Movies ~~~~~\n\n";
-		displayMovies(d);
+		if(choice_choice==1)
+		{
+			displayMovies(d);
+		}
+		else
+		{
+			view_movies();
+		}
 		system("pause");
 		system("cls");
 		goto Add_Movie_Block;
