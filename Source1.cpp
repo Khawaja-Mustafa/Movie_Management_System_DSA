@@ -4,7 +4,7 @@
 #include <ctime>
 #include <conio.h>
 using namespace std;
-void displayMovies(int d);
+void displayMovies(int d);//Prototyping
 //---------------------MovieFunction Block---------------------------------//
 struct Movieddl
 {
@@ -51,6 +51,7 @@ void updateMovies()
 	string mName;
 u_M:
 	int d = 1;
+	int flag = 0;
 	displayMovies(d);
 	cout << "Enter Movie name you want to update: ";
 	cin.ignore();
@@ -66,16 +67,17 @@ u_M:
 			getline(cin, temp->Movie_Date);
 			cout << "\n\t\t Enter updated Time : ";
 			getline(cin, temp->Movie_Time);
+			flag++;
 			return;
 		}
-		else
-		{
-			cout << "Movie Not Found!, try again:";
-			system("pause");
-			system("cls");
-			goto u_M;
-		}
 		temp = temp->next;
+	}
+	if (flag == 0)
+	{
+		cout << "Movie Not Found!, try again:";
+		system("pause");
+		system("cls");
+		goto u_M;
 	}
 }
 void displayMovies(int d)
