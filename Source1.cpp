@@ -3,6 +3,8 @@
 #include <fstream>
 int Av_Tickets[7][7];
 using namespace std;
+
+     //Main structure
 struct MovieManagement
 {
 	string Name, Date, Time;
