@@ -423,7 +423,7 @@ Admin_Login:
 		cout << '*';
 		ch = _getch();
 	}
-	if (pass == "123")
+	if (Admin_ID == 123 && pass == "123")
 	{
 		system("cls");
 		cout << "\n\n\t\t <<<WELCOME>>> \n\n";
