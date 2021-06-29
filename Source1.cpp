@@ -346,7 +346,6 @@ void Display(int Payment)
 			file << "\n\t\t Customer Name : " << Customer_Name << endl;
 			file << "\n\t\t Customer Contact N0# : " << Customer_Number << endl;
 			file << "\n\t\t Movie Name : " << Movie_Name << endl;
-			totalPayment = Payment * TicketPrice;
 			file << "\n\t\t Price of Tickets after discout : " << TicketPrice << endl;
 			file << "\n\t\t Amount of Tickets bought : " << Payment << endl;
 			file << "\n\t\t The Total Bill : " << totalPayment << endl;
@@ -375,14 +374,12 @@ void Display(int Payment)
 			file << "\n\t\t Customer Name : " << Customer_Name << endl;
 			file << "\n\t\t Customer Contact N0# : " << Customer_Number << endl;
 			file << "\n\t\t Movie Name : " << Movie_Name << endl;
-			totalPayment = Payment * TicketPrice;
 			file << "\n\t\t Price of Tickets : " << TicketPrice << endl;
 			file << "\n\t\t Amount of Tickets : " << Payment << endl;
 			file << "\n\t\t The Total Bill : " << totalPayment << endl;
 			file << "\n\t\t Bill time : " << hour << ":" << minuts << ":" << sec << endl;
 			file << "\n\t\t Bill date : " << Day << "/" << Month << "/" << Year << endl;
 			file << "\n\t\t--------------------------------------------\n";
-
 			Payment = 0;
 		}
 	}
