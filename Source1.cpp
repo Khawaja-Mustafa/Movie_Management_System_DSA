@@ -180,7 +180,15 @@ void BookTicket()
 	{
 		for (int j = 0; j < 7; j++)
 		{
-			cout << "\t| " << i << j << " |\t";
+			if (iAv_Ticket[i][j] == 0)
+			{
+				cout << "\t| " << i << j << " |\t";
+			}
+			else
+			{
+				cout << "\t| " << "XX" << " |\t";
+
+			}
 		}
 		cout << endl << endl;
 	}
@@ -189,12 +197,19 @@ void BookTicket()
 	{
 		for (int j = 0; j < 7; j++)
 		{
+		Ticket_Booking:
 			cout << "\n\t\t Do you want to book a Seat/ticket? (Y/N):";
 			cin >> choice_B;
 			if (choice_B == 'Y' || choice_B == 'y')
 			{
 				cout << "\n\t\t Select Row and Column (0 1) :";
 				cin >> i >> j;
+				if(iAv_Ticket[i][j] == 1)
+				{
+					cout << "\n\t\t Ticket Cannot Be Booked, It is already Booked by user!";
+					cout << "\n\t\t Trying Booking any other movie!\n";
+					goto Ticket_Booking;
+				}
 				iAv_Ticket[i][j] = 1;
 				i = 0; // i = 0, j = 0 for running program on i = 6, j = 6.
 				j = 0;
